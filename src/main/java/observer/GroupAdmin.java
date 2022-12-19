@@ -8,7 +8,7 @@ public class GroupAdmin implements Sender {
 
     private UndoableStringBuilder stringBuilder = new UndoableStringBuilder();
     private String name;
-    private List<Member> members = new ArrayList();
+    private List<ConcreteMember> members = new ArrayList();
 
     public GroupAdmin(String name, String s){
         this.name = name;
@@ -17,8 +17,7 @@ public class GroupAdmin implements Sender {
 
     @Override
     public void register(Member obj) {
-        members.add(obj);
-
+        members.add((ConcreteMember) obj);
     }
 
     @Override
@@ -29,22 +28,26 @@ public class GroupAdmin implements Sender {
     @Override
     public void insert(int offset, String obj) {
         stringBuilder.insert(offset, obj);
+        notifyMembers();
     }
 
     @Override
     public void append(String obj) {
         stringBuilder.append(obj);
+        notifyMembers();
     }
 
     @Override
     public void delete(int start, int end) {
         stringBuilder.delete(start,end);
+        notifyMembers();
 
     }
 
     @Override
     public void undo() {
         stringBuilder.undo();
+        notifyMembers();
 
     }
     public UndoableStringBuilder getStringBuilder() {
@@ -53,11 +56,12 @@ public class GroupAdmin implements Sender {
 
     public void setStringBuilder(UndoableStringBuilder stringBuilder) {
         this.stringBuilder = stringBuilder;
+        notifyMembers();
     }
 
 
     public void notifyMembers(){
-        for (Member member: members){
+        for (ConcreteMember member: members){
             member.update(stringBuilder);
         }
     }
