@@ -61,7 +61,7 @@ public class GroupAdmin implements Sender {
 
 
     public void notifyMembers(){
-        for (ConcreteMember member: members){
+        for (Member member: members){
             member.update(stringBuilder);
         }
     }
